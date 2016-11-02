@@ -1,0 +1,6 @@
+{
+	"cmd": ["stylus", "-u", "nib" , "$file" , "--out" , "./html"],
+	"cmd": ["python", "${packages}/User/builds/stylus-build.py" , "${project_path:${folder:${file_path}}}" , "${file}"],
+	"working_dir": "${project_path:${folder:${file_path}}}",
+	"selector": "source.stylus"
+}
