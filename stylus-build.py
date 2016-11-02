@@ -1,27 +1,41 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
+import os.path
 import sys
 import subprocess
 
-args      = sys.argv
-project   = args[1]
-targetDir = args[2]
+def getProjectName(projectDir):
+	dir = projectDir.split('/')
+	return dir[len(dir)-1]
 
-dir = targetDir.split('/')
-counter = 0
+def getDirectory(targetFile,projectName):
+	dir  = targetFile.split('/')
+	dir.pop()
+	flag = False
+	directory = []
+	for file in dir:
+		if flag:
+			directory.append(file)
+		if file == projectName:
+			flag = True
+	directory.pop(0)
+	directory.pop(0)
+	return '/'.join(directory)
 
-for file in dir:
-	if file == 'src':
-		counter += 2
-		break
-	else :
-		counter += 1
+args        = sys.argv
+projectDir  = args[1]
+targetFile  = args[2]
+targetDir   = args[3]
+outputDir   = args[4]
+projectName = getProjectName(projectDir)
+directory   = getDirectory(targetFile,projectName)
 
-for var in xrange(0,counter):
-	dir.pop(0)
+output = projectDir + "/" + outputDir + directory
 
-dir.pop()
-dir = '/'.join(dir)
-output = project + "/html/" + dir
-cmd = ["stylus", "-u", "nib" , targetDir , "--out" , output]
-print subprocess.check_output(cmd)
+if os.path.isdir(output):
+	cmd = ["stylus", "-u", "nib" , targetFile , "--out" , output]
+	print subprocess.check_output(cmd)
+else:
+	print output + '\nディレクトリがありません🐘'
+
+
